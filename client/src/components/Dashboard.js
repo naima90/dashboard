@@ -9,7 +9,7 @@ const Dashboard = () => {
   // fetching data from server
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios("http://localhost:5000/api/startlistentries");
+      const result = await axios("http://localhost:8000/api/startlistentries");
       setData(result.data)
     };
     fetchData();
@@ -22,14 +22,29 @@ const Dashboard = () => {
     setOrganiser(e.target.value);
   }
 
+  const organisorIncome = () => {
+    let total = 0
+    data.filter(filteredData => filteredData.organiserTitle === organiser).map(fd => (
+          total += fd.ticketPrice.value
+          ))
+          return total
+
+  }
+
+  const organisorEvents = () => {
+    return data.filter(filteredData => filteredData.organiserTitle === organiser).map(fd => (
+          fd.eventTitle
+          ))
+    
+  }
+
   
   return (
     <div>
       <Sidebar handleClick={handleClick}/>
       <div>
-        {data.filter(filteredData => filteredData.organiserTitle === organiser).map(fd => (
-          <li key={fd.id}>{fd.eventTitle}</li>
-        ))}
+      <>{organisorEvents().map(events => <li>{events}</li>)}</>
+      {organisorIncome()}
       </div>
       </div>
   );
